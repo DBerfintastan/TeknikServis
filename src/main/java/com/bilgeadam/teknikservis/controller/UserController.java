@@ -1,6 +1,6 @@
 package com.bilgeadam.teknikservis.controller;
 
-import com.bilgeadam.teknikservis.model.User;
+import com.bilgeadam.teknikservis.model.SystemUser;
 import com.bilgeadam.teknikservis.repository.UserRepository;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +18,9 @@ public class UserController {
     }
 
     @PostMapping(path = "save" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> save (@RequestBody User user){
+    public ResponseEntity<String> save (@RequestBody SystemUser systemUser){
         try {
-            boolean result = userRepository.save(user);
+            boolean result = userRepository.save(systemUser);
 
             if(result){
                 return ResponseEntity.ok("User Başarıyla Kaydedildi");
@@ -37,7 +37,7 @@ public class UserController {
 
     }
     @GetMapping(path ="getall" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<User>> getall(){
+    public ResponseEntity<List<SystemUser>> getall(){
         return ResponseEntity.ok(userRepository.getall());
     }
 

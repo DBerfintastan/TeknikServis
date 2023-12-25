@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TokenInfo {
-
     private String username;
     private String token;
     private List<String> authorities;
@@ -45,6 +44,10 @@ public class TokenInfo {
 
     @Override
     public String toString() {
-        return "{\"username\":\"" + username + "\",\"token\":\"" + token + "\",\"authorities\":\"" + getAuthorities() + "\"}";
+        return "TokenInfo{" +
+                "username='" + username + '\'' +
+                ", token='" + token + '\'' +
+                ", authorities=" + authorities +
+                '}';
     }
 }

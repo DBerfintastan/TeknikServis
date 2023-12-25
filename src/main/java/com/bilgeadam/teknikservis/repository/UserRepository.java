@@ -1,7 +1,7 @@
 package com.bilgeadam.teknikservis.repository;
 
 import com.bilgeadam.teknikservis.model.Role;
-import com.bilgeadam.teknikservis.model.User;
+import com.bilgeadam.teknikservis.model.SystemUser;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -31,12 +31,12 @@ public class UserRepository {
 
     public List<GrantedAuthority> getUserRoles(String username)
     {
-        String sql = "SELECT \"authority\" FROM \"public\".\"authorities\" where \"username\" = :USERNAME";
+        String sql = "SELECT \"authority\" FROM \"public\".\"AUTHORITIES\" where \"username\" = :USERNAME";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("USERNAME", username);
+        // beanpropertymapper kullanıyorduk ama burada gerek yok çünkü tek sütun select
+        // yapıyorum
         List<String> liste = namedParameterJdbcTemplate.queryForList(sql, paramMap, String.class);
-
-
         List<GrantedAuthority> roles = new ArrayList<>();
         for (String role : liste)
         {
@@ -45,29 +45,41 @@ public class UserRepository {
         return roles;
     }
 
-    public User getByUsername(String username){
-        String sql="select * from \"public\".\"users\" where \"username\" = :Username";
+
+
+    public SystemUser getByUsername(String username){
+        String sql="select * from \"public\".\"USERS\" where \"username\" = :username";
         Map<String,Object> paramMap = new HashMap<>();
-        paramMap.put("Username", username);
-        return namedParameterJdbcTemplate.queryForObject(sql,paramMap,BeanPropertyRowMapper.newInstance(Users.class));
+        paramMap.put("username", username);
+        return namedParameterJdbcTemplate.queryForObject(sql,paramMap,BeanPropertyRowMapper.newInstance(SystemUser.class));
 
     }
 
-    public boolean save (User user, Role role){
+    public boolean save (SystemUser systemUser){
 
-        String sql = "insert into \"public\".\"USERS\" (\"username\",\"email\",\"password\",\"role\") values (:username, :email, :password, :role)";
+
+        String insertUsers = "insert into \"public\".\"USERS\" (\"username\",\"email\",\"password\") values (:username, :email, :password)";
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("username" , user.getUsername());
-        paramMap.put("email" , user.getEmail());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        paramMap.put("password" , user.getPassword());
-        paramMap.put("role" , user.getRole());
-        return  namedParameterJdbcTemplate.update(sql , paramMap) == 1;
+        paramMap.put("username" , systemUser.getUsername());
+        paramMap.put("email" , systemUser.getEmail());
+        systemUser.setPassword(passwordEncoder.encode(systemUser.getPassword()));
+        paramMap.put("password" , systemUser.getPassword());
+        boolean result =namedParameterJdbcTemplate.update(insertUsers,paramMap)==1;
+
+        //İnsert user Roles
+        String insertRoles= "insert into \"public\".\"AUTHORITIES\" (\"username\",\"authority\") values (:username, :authority)";
+        Map<String,Object> paramMap2= new HashMap<>();
+        paramMap2.put("authority","ROLE_USER");
+        paramMap2.put("username",systemUser.getUsername());
 
 
+        if(result==true){
+           return namedParameterJdbcTemplate.update(insertRoles,paramMap2)==1;
+        }
+        return false;
     }
 
-    public List<User> getall(){
-        return jdbcTemplate.query("select * from \"public\".\"USERS\" order by \"id\" asc", BeanPropertyRowMapper.newInstance(User.class));
+    public List<SystemUser> getall(){
+        return jdbcTemplate.query("select * from \"public\".\"USERS\" order by \"id\" asc", BeanPropertyRowMapper.newInstance(SystemUser.class));
     }
 }

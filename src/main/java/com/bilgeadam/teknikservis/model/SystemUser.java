@@ -1,20 +1,34 @@
 package com.bilgeadam.teknikservis.model;
 
-public class User 
+public class SystemUser
 {
 	private long id;
 	private String username;
 	private String email;
 	private String password;
-	
-	public User() 
+
+//	private List<Role> auth= new ArrayList<>();
+
+	public Role role;
+
+	private String roleName;
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = role.getAuthority();
+
+	}
+
+	public SystemUser()
 	{
 		
 	}
 	
-	
-	
-	public User(long id, String username, String email, String password)
+
+	public SystemUser(long id, String username, String email, String password)
 	{
 		
 		this.id = id;

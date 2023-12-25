@@ -2,14 +2,17 @@ package com.bilgeadam.teknikservis.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.bilgeadam.teknikservis.model.SystemUser;
 import com.bilgeadam.teknikservis.model.TokenInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,7 +28,7 @@ import java.util.stream.Collectors;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
-    private AuthEntryPointJwt authenticationEntryPoint;
+//    private AuthEntryPointJwt authenticationEntryPoint;
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -36,7 +39,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.err.println("şifre kontrol");
         try {
             // burası /login 'e karşılık geliyor
-            User creds = new ObjectMapper().readValue(req.getInputStream(), User.class);
+            SystemUser creds = new ObjectMapper().readValue(req.getInputStream(), SystemUser.class);
             // userservice 'imi invoke eder
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(creds.getUsername(), creds.getPassword(), new ArrayList<>()));
         } catch (IOException e) {
@@ -67,23 +70,23 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.getWriter().flush();
     }
 
-//        @Override
-//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-//        System.err.println("şifre yanlış");
-//        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//
-//        if (failed.getClass() == DisabledException.class) {
-//            // bunun için exception fırlatmama gerek yok
-//            response.getWriter().write("Kullanıcı disabled olmuş");
-//        }
-//        response.getWriter().flush();
-//    }
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException failed) throws IOException, ServletException {
-        super.unsuccessfulAuthentication(request, response, failed);
-        authenticationEntryPoint.commence(request, response, failed);
-    }
+            @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        System.err.println("şifre yanlış");
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
 
+        if (failed.getClass() == DisabledException.class) {
+            // bunun için exception fırlatmama gerek yok
+            response.getWriter().write("Kullanıcı disabled olmuş");
+        }
+        response.getWriter().flush();
+    }
+//    @Override
+//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+//                                              AuthenticationException failed) throws IOException, ServletException {
+//        super.unsuccessfulAuthentication(request, response, failed);
+//        authenticationEntryPoint.commence(request, response, failed);
+//    }
 
 }
+
