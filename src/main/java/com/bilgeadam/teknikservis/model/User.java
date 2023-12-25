@@ -6,7 +6,6 @@ public class User
 	private String username;
 	private String email;
 	private String password;
-	private String role;
 	
 	public User() 
 	{
@@ -15,14 +14,14 @@ public class User
 	
 	
 	
-	public User(long id, String username, String email, String password, String role) 
+	public User(long id, String username, String email, String password)
 	{
 		
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.role = role;
+
 	}
 
 
@@ -51,18 +50,13 @@ public class User
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRole() {
-		return role;
-	}
-	public void setRole(String role) {
-		this.role = role;
-	}
+
 
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", role="
-				+ role + "]";
+				+ "]";
 	}
 	
 	
