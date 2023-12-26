@@ -18,8 +18,8 @@ public class SeConfig  {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http, @Autowired AuthenticationConfiguration authenticationConfiguration) throws Exception {
             http.authorizeHttpRequests(request -> request
-                            .requestMatchers("/booking/**", "/buy/**").hasAuthority("USER")
-                            .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                            .requestMatchers("/booking/**").hasAuthority("ROLE_USER")
+                            .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                             .anyRequest().permitAll())
                     .csrf(AbstractHttpConfigurer::disable)
                     .cors(AbstractHttpConfigurer::disable)
