@@ -31,7 +31,7 @@ ALTER TABLE public."AUTHORITIES" OWNER TO postgres;
 CREATE TABLE public."BOOKING" (
                                   id bigint NOT NULL,
                                   note text,
-                                  booking_date timestamp with time zone NOT NULL,
+                                  booking_date DATE NOT NULL,
                                   status character varying(50) NOT NULL,
                                   service_id bigint NOT NULL,
                                   user_id bigint NOT NULL

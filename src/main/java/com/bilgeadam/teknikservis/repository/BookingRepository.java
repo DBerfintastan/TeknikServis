@@ -121,4 +121,49 @@ public class BookingRepository {
             date = calendar.getTime();
         }
     }
+    
+    public List<Booking> sortDescBooking()
+    {
+        String sql = "select * from \"public\".\"BOOKING\" order by \"booking_date\" desc";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Booking.class));
+    }
+    
+    public List<Booking> sortAscBooking()
+    {
+        String sql = "select * from \"public\".\"BOOKING\" order by \"booking_date\" asc";
+        return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Booking.class));
+    }
+    
+    
+    
+    public List<Booking> searchBookingsByUserName(String username)
+    {
+        String sql =
+                "select \"BOOKING\".\"id\", \"BOOKING\".\"note\", \"BOOKING\".\"status\", \"BOOKING\".\"service_id\", \"BOOKING\".\"user_id\" from " +
+                "\"public\".\"BOOKING\" " +
+                " Inner Join \"USERS\" ON " +
+                "\"USERS\".\"id\" = " +
+                "\"BOOKING\".\"user_id\" WHERE " +
+                "\"USERS\"" +
+                ".\"username\" LIKE :UserName";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("UserName", "%" + username + "%");
+        return jdbcTemplate.query(sql, paramMap, BeanPropertyRowMapper.newInstance(Booking.class));
+    }
+    
+    public boolean updateStatusToProcessing(long id)
+    {
+        String sql = "UPDATE public.\"BOOKING\" SET \"status\"= 'işleme alındı' WHERE \"id\" = :ID";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("ID", id);
+        return jdbcTemplate.update(sql, paramMap) == 1;
+    }
+    
+    public boolean updateStatusToCompleted(long id)
+    {
+        String sql = "UPDATE public.\"BOOKING\" SET \"status\"= 'tamamlandı' WHERE \"id\" = :ID";
+        Map<String, Object> paramMap = new HashMap<>();
+        paramMap.put("ID", id);
+        return jdbcTemplate.update(sql, paramMap) == 1;
+    }
 }
