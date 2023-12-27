@@ -11,7 +11,6 @@ public class Sale_log
 	private long user_id;
 	
 	
-	
 	public Sale_log(long id, Date sale_log_date, String credit_card, long sale_id, long user_id) 
 	{
 		

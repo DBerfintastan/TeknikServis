@@ -1,6 +1,7 @@
 package com.bilgeadam.teknikservis.service;
 
 import com.bilgeadam.teknikservis.model.Sale;
+import com.bilgeadam.teknikservis.model.SaleDTO;
 import com.bilgeadam.teknikservis.repository.SaleRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +34,5 @@ public class SaleService {
             return false;
         }
     }
+
 }

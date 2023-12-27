@@ -6,17 +6,21 @@ public class Sale
 	private String note;
 	private int price;
 	private long product_id;
+	private boolean is_sold; 
 	
 	
-	public Sale(long id, String note, int price, long product_id) 
+	public Sale(long id, String note, int price, long product_id, boolean is_sold) 
 	{
 		
 		this.id = id;
 		this.note = note;
 		this.price = price;
 		this.product_id = product_id;
+		this.is_sold = is_sold;
 	}
 
+
+	
 
 	public Sale() 
 	{
@@ -47,6 +51,12 @@ public class Sale
 	}
 	public void setProduct_id(long product_id) {
 		this.product_id = product_id;
+	}
+	public boolean isIs_sold() {
+		return is_sold;
+	}
+	public void setIs_sold(boolean is_sold) {
+		this.is_sold = is_sold;
 	}
 
 

@@ -373,7 +373,8 @@ ALTER TABLE ONLY public."SALE_LOG"
 ALTER TABLE ONLY public."SALE"
     ADD CONSTRAINT sale_id PRIMARY KEY (id);
 
-
+ALTER TABLE ONLY public."SALE"
+    ADD CONSTRAINT sale_id_unique UNIQUE (id);
 --
 -- Name: SERVICE service_id; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
@@ -427,7 +428,7 @@ ALTER TABLE ONLY public."SALE"
 --
 
 ALTER TABLE ONLY public."SALE_LOG"
-    ADD CONSTRAINT "sale_saleLog_FK" FOREIGN KEY (sale_id) REFERENCES public."SALE"(id);
+    ADD CONSTRAINT "sale_saleLog_FK" FOREIGN KEY (sale_id) REFERENCES public."SALE"(id) ON UPDATE CASCADE ON DELETE CASCADE NOT VALID;
 
 
 --

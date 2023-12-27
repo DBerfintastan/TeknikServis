@@ -1,7 +1,14 @@
 package com.bilgeadam.teknikservis.controller;
 
+import com.bilgeadam.teknikservis.model.Product;
 import com.bilgeadam.teknikservis.model.Sale;
+import com.bilgeadam.teknikservis.model.Service;
+import com.bilgeadam.teknikservis.repository.ProductRepository;
+import com.bilgeadam.teknikservis.repository.SaleRepository;
+import com.bilgeadam.teknikservis.service.ProductService;
 import com.bilgeadam.teknikservis.service.SaleService;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -14,9 +21,15 @@ import java.util.List;
 public class SaleController {
 
     private final SaleService saleService;
+    private final SaleRepository saleRepository;
+    private final ProductRepository productRepository;
+    private final ProductService productService;
 
-    public SaleController(SaleService saleService) {
+    public SaleController(SaleService saleService, SaleRepository saleRepository, ProductRepository productRepository, ProductService productService) {
         this.saleService = saleService;
+		this.saleRepository = saleRepository;
+		this.productRepository = productRepository;
+		this.productService = productService;
     }
 
     /*
@@ -72,4 +85,11 @@ public class SaleController {
             return ResponseEntity.internalServerError().body("Kaydedilemedi. Lütfen tekrar deneyiniz.");
         }
     }
+    @GetMapping("/get/{product_name}")
+//    localhost:8080/sale/get/RAM
+    public ResponseEntity<List<Sale>> getAll(@PathVariable String product_name) {
+		return ResponseEntity.ok(saleRepository.getSaleByProductName(product_name));
+   
+}
+    
 }
