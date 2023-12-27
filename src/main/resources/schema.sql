@@ -133,7 +133,7 @@ CREATE TABLE public."PROPOSAL" (
                                    note character varying(1000),
                                    price numeric NOT NULL,
                                    user_id bigint NOT NULL,
-                                   status boolean NOT NULL,
+                                   status character varying(100) NOT NULL,
                                    product_id bigint NOT NULL
 );
 

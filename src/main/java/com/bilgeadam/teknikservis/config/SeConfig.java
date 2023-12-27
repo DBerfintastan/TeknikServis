@@ -23,7 +23,8 @@ public class SeConfig  {
                             .requestMatchers("/booking/admin/**").hasAuthority("ROLE_ADMIN")
                             .requestMatchers("/sale/admin/**").hasAuthority("ROLE_ADMIN")
                             .requestMatchers("/proposal/user/**").hasAuthority("ROLE_USER")
-                            
+                            .requestMatchers("/proposal/admin/**").hasAuthority("ROLE_ADMIN")
+
                             .anyRequest().permitAll())
                     .csrf(AbstractHttpConfigurer::disable)
                     .cors(AbstractHttpConfigurer::disable)

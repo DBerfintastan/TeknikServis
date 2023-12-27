@@ -7,11 +7,12 @@ public class Proposal {
 	private int price;
 	private long user_id;
 	private long product_id;
-	private boolean status;
-	
-	
-	public Proposal(long id, String note, int price, long user_id, long product_id, boolean status) {
-		
+	private String status;
+
+	public Proposal() {
+	}
+
+	public Proposal(long id, String note, int price, long user_id, long product_id, String status) {
 		this.id = id;
 		this.note = note;
 		this.price = price;
@@ -20,45 +21,51 @@ public class Proposal {
 		this.status = status;
 	}
 
-	public Proposal()
-	{
-		
-	}
-	
 	public long getId() {
 		return id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}
+
 	public String getNote() {
 		return note;
 	}
+
 	public void setNote(String note) {
 		this.note = note;
 	}
+
 	public int getPrice() {
 		return price;
 	}
+
 	public void setPrice(int price) {
 		this.price = price;
 	}
+
 	public long getUser_id() {
 		return user_id;
 	}
+
 	public void setUser_id(long user_id) {
 		this.user_id = user_id;
 	}
+
 	public long getProduct_id() {
 		return product_id;
 	}
+
 	public void setProduct_id(long product_id) {
 		this.product_id = product_id;
 	}
-	public boolean isStatus() {
+
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(boolean status) {
+
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
