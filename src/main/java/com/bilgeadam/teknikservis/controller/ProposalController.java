@@ -4,6 +4,12 @@ import com.bilgeadam.teknikservis.model.Proposal;
 import com.bilgeadam.teknikservis.model.ProposalAdminDto;
 import com.bilgeadam.teknikservis.model.ProposalDTO;
 import com.bilgeadam.teknikservis.repository.ProposalRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
@@ -17,6 +23,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/proposal")
+@io.swagger.v3.oas.annotations.tags.Tag(description = "Proposal Endpointleri", name = "Propasal")
 public class ProposalController {
     private final ProposalRepository proposalRepository;
     private final MessageSource messageSource;
@@ -28,6 +35,9 @@ public class ProposalController {
     }
 
     @GetMapping("/user/getAll")
+    @Operation(description = "Başarılı olursa 200", summary ="Sistemdeki kullanıcıları gösterir")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa")})
     public ResponseEntity<List<Proposal>> getAll() {
         return ResponseEntity.ok(proposalRepository.getAllForUser());
     }
@@ -40,6 +50,10 @@ public class ProposalController {
      */
 
     @DeleteMapping("/user/deleteById/{id}")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Silinirse 200 silinmez ise 400", summary = "ID ile sil")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Silinirse"), @ApiResponse(responseCode = "400", description = "Silinmez ise")})
+
     public ResponseEntity<String> deleteById(Locale locale, @PathVariable long id) {
         Object[] params = new Object[1];
         params[0] = id;
@@ -51,6 +65,10 @@ public class ProposalController {
     }
 
     @PostMapping("/user/saveWithDTO")
+    @Operation (description = "Kayıt edilir ise 200 edilmez ise 400", summary = "Product Name body ile kaydet")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Edilir ise"), @ApiResponse(responseCode = "400", description = "Edilmez ise")})
+
     public ResponseEntity<String> save(Locale locale, @RequestBody ProposalDTO proposalDTO) {
         boolean result = proposalRepository.saveWithDTO(proposalDTO);
         if (result)
@@ -59,6 +77,10 @@ public class ProposalController {
             return ResponseEntity.badRequest().build();
     }
     @PostMapping("/user/saveWithId")
+    @Operation (description = "Kayıt edilir ise 200 edilmez ise 400", summary = "Id body ile kaydet")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Edilir ise"), @ApiResponse(responseCode = "400", description = "Edilmez ise")})
+
     public ResponseEntity<String> save(Locale locale,@RequestBody Proposal proposal) {
         boolean result = proposalRepository.saveWithId(proposal);
         if (result)
@@ -67,6 +89,9 @@ public class ProposalController {
             return ResponseEntity.badRequest().build();
     }
     @GetMapping(path = "admin/getalldto",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(description = "Başarılı olursa 200", summary ="Sistemdeki kullanıcıları gösterir")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa")})
     public ResponseEntity<List<ProposalAdminDto>> getalldto()
     {
         return ResponseEntity.ok(proposalRepository.getAllDTO());
@@ -96,6 +121,10 @@ public class ProposalController {
         }
     }
     @PutMapping(path = "/admin/updatefalsestatus/{id}")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Güncellenirse 200 Güncellenmezsse 500", summary = "ID ile güncelle")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Güncellenirse"), @ApiResponse(responseCode = "500", description = "Güncellenirse ise")})
+
     public ResponseEntity<String> updateFalseStatus(Locale locale ,@PathVariable(name = "id") long id)
     {
         try
@@ -118,6 +147,10 @@ public class ProposalController {
         }
     }
     @GetMapping(path = "/admin/getbyiddto/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Getirirse 200 Getirmezsse 500", summary = "ID ile getir")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Getirirse"), @ApiResponse(responseCode = "500", description = "Getirmezsse ise")})
+
     public ResponseEntity<ProposalAdminDto> getbyiddto(@PathVariable(name = "id") long id)
     {
         try{

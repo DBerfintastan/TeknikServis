@@ -1,5 +1,8 @@
 package com.bilgeadam.teknikservis.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import java.util.Locale;
 
 @RestController()
 @RequestMapping("/buy")
+@io.swagger.v3.oas.annotations.tags.Tag(description = "Sale Log Endpointleri", name = "Sale Log")
 public class Sale_logController{
 	private final Sale_logRepository saleLogRepository;
     private final MessageSource messageSource;
@@ -26,6 +30,10 @@ public class Sale_logController{
     }
 
     @PostMapping("/product")
+    @Operation(description = "Başarılı olursa 200", summary ="Satın alımı gösterir")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa"),@ApiResponse(responseCode = "500", description = "Başarılı olmaz ise")})
+
     public ResponseEntity<String> buyProduct(Locale locale, @RequestBody Sale_log saleLog) {
         boolean result = saleLogRepository.save(saleLog);
         if (result)

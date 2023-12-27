@@ -4,6 +4,10 @@ import com.bilgeadam.teknikservis.model.Booking;
 import com.bilgeadam.teknikservis.repository.BookingRepository;
 import com.bilgeadam.teknikservis.repository.UserRepository;
 import com.bilgeadam.teknikservis.service.BookingService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,7 @@ import java.util.Locale;
 
 @RestController
 @RequestMapping("/booking")
+@io.swagger.v3.oas.annotations.tags.Tag(description = "Booking Endpointleri", name = "Booking")
 public class BookingController
 {
     
@@ -34,12 +39,19 @@ public class BookingController
     }
     
     @GetMapping("/user/getById/{id}")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Bulunursa 200 bulunamazsa 404", summary = "ID ile getir")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Bulunursa"), @ApiResponse(responseCode = "404", description = "Bulunamazsa") ,@ApiResponse(responseCode = "403", description = "Rol yanlışsa") })
+
     public ResponseEntity<Booking> getById(@PathVariable long id)
     {
         return ResponseEntity.ok(bookingRepository.getById(id));
     }
     
     @PostMapping("/user/save")
+    @Operation(description = "Başarılı olursa 200", summary ="Sistemdeki kullanıcıları gösterir")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa")})
     public ResponseEntity<Booking> appointment(@RequestBody Booking booking)
     {
         try
@@ -65,6 +77,10 @@ public class BookingController
     }
     
     @DeleteMapping("/user/deleteById/{id}")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Bulunursa 200 bulunamazsa 400", summary = "ID ile sil")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Silinirse"), @ApiResponse(responseCode = "400", description = "Silinmez ise")})
+
     public ResponseEntity<String> deleteById(Locale locale, @PathVariable long id)
     {
         Object[] params = new Object[1];
@@ -82,10 +98,13 @@ public class BookingController
     
     // Randevuları tarihine göre artan ve azalan header alıp sıralayarak döndürür.
     @GetMapping(path = "/admin/sortbooking", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(description = "Başarılı olursa 200 olmazssa 400", summary ="Sıralama")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa"),@ApiResponse(responseCode = "400", description = "Başarılı olmazssa")})
     public ResponseEntity<List<Booking>> sortBooking(
             @RequestHeader(name = "sortType") String sortType)
     {
-        
+
         // localhost:8080/booking/sortbooking
         try
         {
@@ -116,6 +135,10 @@ public class BookingController
     
     // Randevuları tarihine göre artan sırayla sıralayarak döndürür.
     @GetMapping(path = "/admin/sortascbooking", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(description = "Başarılı olursa 200 olmazssa 500", summary ="Sıralama")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa"),@ApiResponse(responseCode = "500", description = "Başarılı olmazssa")})
+
     public ResponseEntity<List<Booking>> sortAscBooking()
     {
         
@@ -134,6 +157,10 @@ public class BookingController
     
     // Randevuları tarihine göre azalan sırayla sıralayarak döndürür.
     @GetMapping(path = "/admin/sortdescbooking", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(description = "Başarılı olursa 200 olmazssa 500", summary ="Sıralama")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa"),@ApiResponse(responseCode = "500", description = "Başarılı olmazssa")})
+
     public ResponseEntity<List<Booking>> sortDescBooking()
     {
         
@@ -152,6 +179,10 @@ public class BookingController
     
     // Belirli bir kullanıcının adına sahip randevuları döndürür
     @GetMapping(path = "/admin/searchbyusername", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(parameters = @Parameter(name = "username", description = "istenen username"), description = "Bulunursa 200 bulunamazsa 400", summary = "ID ver")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Bulunursa"), @ApiResponse(responseCode = "400", description = "Bulunamazsa ise")})
+
     public ResponseEntity<List<Booking>> searchBookingsByUserName(@RequestHeader(name = "username") String username)
     {
         
@@ -175,6 +206,10 @@ public class BookingController
     
     // Belirli bir randevunun durumunu "işleme alındı" olarak günceller.
     @PutMapping(path = "/admin/bookingprocessheader")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Güncelllenirse 201 güncellenmesse 400", summary = "ID ver")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "201", description = "Güncelllenirse"), @ApiResponse(responseCode = "400", description = "Güncellenmez ise")})
+
     public ResponseEntity<String> updateStatusToProcessingHeader(Locale locale,@RequestHeader(name = "id") long id)
     {
         Object[] params = new Object[1];
@@ -200,6 +235,10 @@ public class BookingController
     }
     
     @PutMapping(path = "/admin/bookingprocess/{id}")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Güncelllenirse 201 güncellenmesse 400", summary = "ID ver")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "201", description = "Güncelllenirse"), @ApiResponse(responseCode = "400", description = "Güncellenmez ise")})
+
     public ResponseEntity<String> updateStatusToProcessing(Locale locale,@PathVariable(name = "id") long id)
     {
         Object[] params = new Object[1];
@@ -227,6 +266,10 @@ public class BookingController
     
     // Belirli bir randevunun durumunu "tamamlandı" olarak günceller.
     @PutMapping(path = "/admin/bookingcomplete")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Güncelllenirse 201 güncellenmesse 400", summary = "ID ver")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "201", description = "Güncelllenirse"), @ApiResponse(responseCode = "400", description = "Güncellenmez ise")})
+
     public ResponseEntity<String> updateStatusToCompletedHeader(Locale locale,@RequestHeader(name = "id") long id)
     {
         Object[] params = new Object[1];
@@ -253,6 +296,10 @@ public class BookingController
     }
     
     @PutMapping(path = "/admin/bookingcomplete/{id}")
+    @Operation(parameters = @Parameter(name = "id", description = "istenen id"), description = "Güncelllenirse 201 güncellenmesse 400", summary = "ID ver")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "201", description = "Güncelllenirse"), @ApiResponse(responseCode = "400", description = "Güncellenmez ise")})
+
     public ResponseEntity<String> updateStatusToCompleted(Locale locale,@PathVariable(name = "id") long id)
     {
         Object[] params = new Object[1];
