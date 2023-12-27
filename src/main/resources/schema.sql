@@ -173,7 +173,8 @@ CREATE TABLE public."SALE" (
                                id bigint NOT NULL,
                                note character varying(255) NOT NULL,
                                price numeric NOT NULL,
-                               product_id bigint NOT NULL
+                               product_id bigint NOT NULL,
+                               is_sold boolean NOT NULL DEFAULT false
 );
 
 
