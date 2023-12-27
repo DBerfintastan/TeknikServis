@@ -5,12 +5,14 @@ import com.bilgeadam.teknikservis.repository.BookingRepository;
 import com.bilgeadam.teknikservis.repository.UserRepository;
 import com.bilgeadam.teknikservis.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 
 @RestController
@@ -20,12 +22,15 @@ public class BookingController
     
     private final BookingRepository bookingRepository;
     private final BookingService bookingService;
+
+    private final MessageSource messageSource;
     
     @Autowired
-    public BookingController(BookingRepository repository, UserRepository userRepository, BookingService bookingService)
+    public BookingController(BookingRepository repository, UserRepository userRepository, BookingService bookingService, MessageSource messageSource)
     {
         this.bookingRepository = repository;
         this.bookingService = bookingService;
+        this.messageSource = messageSource;
     }
     
     @GetMapping("/user/getById/{id}")
@@ -60,16 +65,18 @@ public class BookingController
     }
     
     @DeleteMapping("/user/deleteById/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable long id)
+    public ResponseEntity<String> deleteById(Locale locale, @PathVariable long id)
     {
+        Object[] params = new Object[1];
+        params[0] = id;
         boolean result = bookingRepository.deleteById(id);
         if (result)
         {
-            return ResponseEntity.ok("Booking Deleted Successfully");
+            return ResponseEntity.ok(messageSource.getMessage("booking.delete.success" , params, locale));
         }
         else
         {
-            return ResponseEntity.badRequest().body("You can not remove this Booking");
+            return ResponseEntity.badRequest().body(messageSource.getMessage("booking.delete.error" , params, locale));
         }
     }
     
@@ -168,31 +175,35 @@ public class BookingController
     
     // Belirli bir randevunun durumunu "işleme alındı" olarak günceller.
     @PutMapping(path = "/admin/bookingprocessheader")
-    public ResponseEntity<String> updateStatusToProcessingHeader(@RequestHeader(name = "id") long id)
+    public ResponseEntity<String> updateStatusToProcessingHeader(Locale locale,@RequestHeader(name = "id") long id)
     {
+        Object[] params = new Object[1];
+        params[0] = id;
         // localhost:8080/booking/bookingprocessheader
         try
         {
             boolean result = bookingService.updateStatusToProcessingHeader(id);
             if (result)
             {
-                return ResponseEntity.status(HttpStatus.CREATED).body("Randevu işleme alındı, ID: " + id);
+                return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("booking.updateStatus.header.success",params,locale));
             }
             else
             {
-                return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+                return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.header.error", null, locale));
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+            return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.header.error", null, locale));
         }
     }
     
     @PutMapping(path = "/admin/bookingprocess/{id}")
-    public ResponseEntity<String> updateStatusToProcessing(@PathVariable(name = "id") long id)
+    public ResponseEntity<String> updateStatusToProcessing(Locale locale,@PathVariable(name = "id") long id)
     {
+        Object[] params = new Object[1];
+        params[0] = id;
         // localhost:8080/booking/bookingprocessheader
         try
         {
@@ -200,24 +211,26 @@ public class BookingController
             if (result)
             {
                 return ResponseEntity.status(HttpStatus.CREATED)
-                                     .body("Randevu işleme alındı, ID: " + id);
+                                     .body(messageSource.getMessage("booking.updateStatus.process.success",params,locale));
             }
             else
             {
-                return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+                return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.process.error",null,locale));
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+            return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.process.error",null,locale));
         }
     }
     
     // Belirli bir randevunun durumunu "tamamlandı" olarak günceller.
     @PutMapping(path = "/admin/bookingcomplete")
-    public ResponseEntity<String> updateStatusToCompletedHeader(@RequestHeader(name = "id") long id)
+    public ResponseEntity<String> updateStatusToCompletedHeader(Locale locale,@RequestHeader(name = "id") long id)
     {
+        Object[] params = new Object[1];
+        params[0] = id;
         // localhost:8080/booking/bookingcomplete
         try
         {
@@ -225,23 +238,25 @@ public class BookingController
             if (result)
             {
                 return ResponseEntity.status(HttpStatus.CREATED)
-                                     .body("Randevu tamamlandı, ID: " + id);
+                                     .body(messageSource.getMessage("booking.updateStatus.completedHeader.success" , params, locale));
             }
             else
             {
-                return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+                return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.completedHeader.error",null,locale));
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+            return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.completedHeader.error",null,locale));
         }
     }
     
     @PutMapping(path = "/admin/bookingcomplete/{id}")
-    public ResponseEntity<String> updateStatusToCompleted(@PathVariable(name = "id") long id)
+    public ResponseEntity<String> updateStatusToCompleted(Locale locale,@PathVariable(name = "id") long id)
     {
+        Object[] params = new Object[1];
+        params[0] = id;
         // localhost:8080/booking/bookingcomplete
         try
         {
@@ -249,17 +264,17 @@ public class BookingController
             if (result)
             {
                 return ResponseEntity.status(HttpStatus.CREATED)
-                                     .body("Randevu tamamlandı, ID: " + id);
+                                     .body(messageSource.getMessage("booking.updateStatus.completed.success" , params, locale));
             }
             else
             {
-                return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+                return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.completed.error" , null, locale));
             }
         }
         catch (Exception e)
         {
             e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Randevu durumu güncellenemedi");
+            return ResponseEntity.internalServerError().body(messageSource.getMessage("booking.updateStatus.completed.error" , null, locale));
         }
     }
     
