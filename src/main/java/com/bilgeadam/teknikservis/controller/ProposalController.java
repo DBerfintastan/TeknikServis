@@ -35,7 +35,7 @@ public class ProposalController {
     }
 
     @GetMapping("/user/getAll")
-    @Operation(description = "Başarılı olursa 200", summary ="Sistemdeki kullanıcıları gösterir")
+    @Operation(description = "Başarılı olursa 200", summary ="Sistemdeki kullanıcıların kayıtlı tekliflerini gösterir")
     @ApiResponses(value =
             { @ApiResponse(responseCode = "200", description = "Başarılı olursa")})
     public ResponseEntity<List<Proposal>> getAll() {

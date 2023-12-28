@@ -10,31 +10,23 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@Profile({"default", "prod"})
-public class SeConfig {
-
+@Profile("test")
+public class SeTestConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, @Autowired AuthenticationConfiguration authenticationConfiguration) throws Exception {
         http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/booking/user/**").hasAuthority("ROLE_USER")
-                        .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/booking/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/sale/admin/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/proposal/user/**").hasAuthority("ROLE_USER")
-                        .requestMatchers("/proposal/admin/**").hasAuthority("ROLE_ADMIN")
 
                         .anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
-                .addFilterAfter(new JWTAuthorizationFilter("default"), JWTAuthenticationFilter.class);
+                .addFilterAfter(new JWTAuthorizationFilter("test"), JWTAuthenticationFilter.class);
 
         return http.build();
     }
+
 }

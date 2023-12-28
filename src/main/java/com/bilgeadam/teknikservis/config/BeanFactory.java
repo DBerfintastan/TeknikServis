@@ -1,7 +1,6 @@
 package com.bilgeadam.teknikservis.config;
 
 
-
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.ExternalDocumentation;
@@ -17,25 +16,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BeanFactory {
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
-    public ResourceBundleMessageSource bundleMessageSource()
-    {
+    public ResourceBundleMessageSource bundleMessageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages");
         messageSource.setDefaultLocale(null);
         return messageSource;
     }
 
-   @Bean
-    public OpenAPI springShopOpenAPI()
-    {
+    @Bean
+    public OpenAPI springShopOpenAPI() {
         return new OpenAPI().addSecurityItem(new SecurityRequirement().addList("Bearer Authentication")).components(new Components().addSecuritySchemes
-                        ("Bearer Authentication", createAPIKeyScheme())).info(new Info().title("Teknik Servis Sistemi").description("Teknik Servis Application").version("V1.0").license(new License().name("Apache 2.0").url("localhost:8080/license"))).externalDocs(new ExternalDocumentation().description("Teknik Servis Rest Dökümantasyonu").url("localhost:8080/externaldocs"));
+                ("Bearer Authentication", createAPIKeyScheme())).info(new Info().title("Teknik Servis Sistemi").description("Teknik Servis Application").version("V1.0").license(new License().name("Apache 2.0").url("localhost:8080/license"))).externalDocs(new ExternalDocumentation().description("Teknik Servis Rest Dökümantasyonu").url("localhost:8080/externaldocs"));
     }
 
     private SecurityScheme createAPIKeyScheme() {
