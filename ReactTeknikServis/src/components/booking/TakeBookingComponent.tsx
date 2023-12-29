@@ -1,55 +1,136 @@
-/*
-import axios from "axios";
-import { FormEvent, useState } from "react";
-import { Button, Card, FormCheck, FormControl } from "react-bootstrap";
-import { Form, useNavigate } from "react-router-dom";
+import {
+  Button,
+  Card,
+  FormControl,
+  Form,
+  FormSelect,
+  Table,
+} from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { getAxiosHeaders } from "../utils/Utils";
+import { IService } from "../model/IService";
+import axiosconfig from "../utils/axiosconfig";
+import { IBooking } from "../model/Booking";
+import { useEffect, useState } from "react";
 
-export default function TakeBookingComponen(){
-    const [note, setNote] = useState<string>("");
-    const [serviceId, setServiceId] = useState<boolean>(false);
+export default function TakeBookingComponent() {
+  console.log(localStorage.getItem("userjwt"));
 
-    const mynavigate = useNavigate();
+  const [note, setNote] = useState("");
+  const [serviceId, setServiceId] = useState(-1);
+  const [services, setServices] = useState<IService[]>([]);
+  const [myBookings, setMyBookings] = useState<IBooking[]>([]);
 
-    function handleSubmit(event: FormEvent<HTMLFormElement>) {
-        // form sayfayı post ettirmesin diye
-        event.preventDefault();
-        // burası görünemse de bir json veya bir class
-        // burada IOgretmen de kullanılabilir ama id 'ye ihtiyacım yok
-        const sendData = {
-          note: note,
-          serviceId: serviceId,
-        };
-        axios.post("ogretmen/save", sendData, getAxiosHeaders()).then((res) => {
-          if (res.status === 200) {
-            // navlink yerine router üzerinden navigate
-            // /ogretmen linkine tıklamış gibi
-            mynavigate("/booking");
-          }
-        });
-      }
-    
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // getMonth() returns 0-11
+    const day = date.getDate();
+
+    // Format: YYYY-MM-DD
+    return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // iki sitek asenkron çalışıyor ve paralel sonuç bekliyor
+    //burada bütün servisleri get yaptır
+    axiosconfig.get("/services/getAll").then((response) => {
+      try {
+        setServices(response.data);
+      } catch (err) {}
+    });
+    //burası user id ile aynı olmakı
+    axiosconfig
+      .get("/booking/user/getAll", getAxiosHeaders())
+      .then((response) => {
+        try {
+          setMyBookings(response.data);
+        } catch (err) {}
+      });
+  }, []);
+
+  function handleSubmit(event) {
+    const token = localStorage.getItem("userjwt");
+    event.preventDefault();
+
+    const sendData = {
+      note: note,
+      service_id: serviceId,
+    };
+
+    axiosconfig
+      .post("booking/user/save", sendData, getAxiosHeaders())
+      .then((res) => {
+        console.log(getAxiosHeaders);
+        if (res.status === 200) {
+          navigate("/booking");
+        }
+      })
+      .catch((error) => {
+        console.error("There was an error!", error);
+      });
+  }
+
   return (
     <Card>
       <Card.Body className="shadow">
-        <Form method="post" onSubmit={(e) => handleSubmit(e)}>
+        <Form method="post" onSubmit={handleSubmit}>
           <FormControl
             type="text"
-            placeholder="İsim"
-            onChange={(e) => {
-              setOgrName(e.target.value);
-            }}
-          ></FormControl>
-          <FormCheck
-            label="Is Gıcık ?"
-            onChange={(e) => setOgrIsGicik(e.target.checked)}
-          ></FormCheck>
+            placeholder="Customer Note"
+            onChange={(e) => setNote(e.target.value)}
+          />
+
+          <FormSelect
+            onChange={(e) => setServiceId(Number.parseInt(e.target.value))}
+          >
+            <option key={-1} value={-1}>
+              Servis seçiniz
+            </option>
+            {services.map((service, i) => (
+              <option key={i} value={service.id}>
+                {service.description}
+              </option>
+            ))}
+          </FormSelect>
+          <br />
           <Button variant="outline-primary" type="submit">
-            Ekle
+            Booking Submit
           </Button>
         </Form>
       </Card.Body>
+      <hr />
+      <center>
+        <h1 style={{ fontWeight: "bold" }}>My Booking List</h1>
+      </center>
+
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Service</th>
+            <th>Note</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {myBookings.map((myBooking, i) => (
+            <tr key={i}>
+              <td>{myBooking.id}</td>
+              <td>{services.at(myBooking.service_id - 1)?.description}</td>
+              <td>{myBooking.note}</td>
+              <td>{formatDate(myBooking.booking_date)}</td>
+              <td>{myBooking.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </Card>
   );
 }
-*/
