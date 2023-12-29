@@ -20,6 +20,13 @@ export default function MenuComponent() {
         >
           Bookings
         </NavLink>
+        <NavLink
+          className={({ isActive }) => (isActive ? "bg-info" : "")}
+          to="/bookingAdmin"
+          end
+        >
+          BookingsAdmin
+        </NavLink>
         {/* context içerisindeki state bu componentin render edilmesini sağlıyor */}
         <NavLink
           to="/ogrenci"

@@ -31,24 +31,6 @@ export default function LoginComponent() {
       authorities: authoritiesMatch[1], // Directly assigning the captured string
     };
   }
-  //ADMIN İÇİN YAPILMALI BU İŞLEM
-  function handleSubmitAdmin() {
-    axiosconfig
-      .post("/login", { username: "admin", password: "1234" })
-      .then((response) => {
-        const tokenInfo: ITokenInfo = response.data;
-        const username = tokenInfo.username;
-        const userjwt = tokenInfo.token;
-        const authorities = tokenInfo.authorities;
-        localStorage.setItem("username", username);
-        localStorage.setItem("userjwt", userjwt);
-        localStorage.setItem("authorities", authorities);
-        // bu bütün sayfayı refresh eder context 'e gerek kalmaz, ama güzel bir çözüm değil
-        // window.location.replace("/");
-        ourUserContext.setterforusername(username);
-        mynavigate("/");
-      });
-  }
   //BERKE
   function handleSubmitUser() {
     axiosconfig
@@ -63,6 +45,32 @@ export default function LoginComponent() {
           //console.log(localStorage.getItem("userjwt"))
           localStorage.setItem("authorities", tokenInfo.authorities);
           ourUserContext.setterforusername(tokenInfo.username);
+          mynavigate("/");
+        } else {
+          console.error("Failed to parse token info");
+          // Handle parsing failure appropriately
+        }
+      })
+      .catch((error) => {
+        console.error("Login error:", error);
+        // Handle login error appropriately
+      });
+  }
+
+  function handleSubmitAdmin() {
+    axiosconfig
+      .post("/login", { username: "admin", password: "1234" })
+      .then((response) => {
+        const rawTokenInfo = response.data;
+        const tokenInfo = parseTokenInfo(rawTokenInfo);
+
+        if (tokenInfo) {
+          localStorage.setItem("username", tokenInfo.username);
+          localStorage.setItem("userjwt", tokenInfo.token);
+          //console.log(localStorage.getItem("userjwt"))
+          localStorage.setItem("authorities", tokenInfo.authorities);
+          ourUserContext.setterforusername(tokenInfo.username);
+          console.log(response.data);
           mynavigate("/");
         } else {
           console.error("Failed to parse token info");

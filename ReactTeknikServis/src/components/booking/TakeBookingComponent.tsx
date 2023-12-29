@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { getAxiosHeaders } from "../utils/Utils";
 import { IService } from "../model/IService";
 import axiosconfig from "../utils/axiosconfig";
-import { IBooking } from "../model/Booking";
+import { IBooking } from "../model/IBooking";
 import { useEffect, useState } from "react";
 
 export default function TakeBookingComponent() {
