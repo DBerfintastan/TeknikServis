@@ -1,7 +1,6 @@
-import { EffectCallback, MouseEventHandler, useEffect, useState } from "react";
+import { EffectCallback,useEffect, useState } from "react";
 import axiosconfig from "../utils/axiosconfig";
-import { Button, Row, Spinner, Table } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Row, Spinner, Table } from "react-bootstrap";
 import { IBooking } from "../model/IBooking";
 import { getAxiosHeaders } from "../utils/Utils";
 
@@ -21,8 +20,8 @@ export default function BookingAdminComponent() {
 
   function completeBooking(id: any) {
     return () => {
-      axiosconfig
-        .put("/booking/admin/bookingcomplete/" + id, getAxiosHeaders())
+      axiosconfig //put yaparken parametreyi URL,DATA,GETAXIOS olarak yap
+        .put("/booking/admin/bookingcomplete/" + id, "",getAxiosHeaders())
         .then(initialize());
     };
   }
@@ -30,7 +29,7 @@ export default function BookingAdminComponent() {
   function processBooking(id: any) {
     return () => {
       axiosconfig
-        .put("/booking/admin/bookingprocess/" + id, getAxiosHeaders())
+        .put("/booking/admin/bookingprocess/" + id,"", getAxiosHeaders())
         .then(initialize());
     };
   }
