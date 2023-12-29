@@ -1,8 +1,11 @@
 import { Button, Stack } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UsernameContext";
+import { useContext } from "react";
 
 export default function MenuComponent() {
   const mynavigate = useNavigate();
+  const ourUserContext = useContext(UserContext);
 
   return (
     <Stack>
@@ -38,6 +41,9 @@ export default function MenuComponent() {
         >
           Services
         </NavLink>
+
+
+        
         <NavLink
           to="/konu/kaydet"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
@@ -50,7 +56,15 @@ export default function MenuComponent() {
           className={({ isActive }) => (isActive ? "bg-info" : "")}
         >
           Sale_Log
+
+          
         </NavLink>
+        {localStorage.getItem("userjwt") === null &&
+        <NavLink to="user/save" className={({ isActive }) => (isActive ? "bg-info" : "")}>
+          User sign up
+        </NavLink> }
+
+
         {localStorage.getItem("userjwt") === null && (
           <NavLink to="/login" className={({ isActive }) => (isActive ? "bg-info" : "")}>
             Login
@@ -63,9 +77,9 @@ export default function MenuComponent() {
               localStorage.removeItem("username");
               localStorage.removeItem("userjwt");
               localStorage.removeItem("authorities");
-              //ourUserContext.setterforusername("");
+              ourUserContext.setterforusername("");
               // replace çalışmadı
-              mynavigate("/ogretmen", { replace: true });
+              mynavigate("/", { replace: true });
             }}
           >
             Logout

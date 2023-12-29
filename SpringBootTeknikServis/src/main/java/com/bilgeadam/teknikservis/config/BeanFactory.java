@@ -13,6 +13,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Component
 public class BeanFactory {
@@ -28,6 +30,8 @@ public class BeanFactory {
         messageSource.setDefaultLocale(null);
         return messageSource;
     }
+
+
 
     @Bean
     public OpenAPI springShopOpenAPI() {

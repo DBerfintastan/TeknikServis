@@ -70,7 +70,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         res.getWriter().flush();
     }
 
-            @Override
+    @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         System.err.println("şifre yanlış");
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -89,4 +89,5 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //    }
 
 }
+
 
