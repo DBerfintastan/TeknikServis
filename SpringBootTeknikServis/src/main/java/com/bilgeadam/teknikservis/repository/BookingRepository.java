@@ -54,6 +54,13 @@ public class BookingRepository {
         return jdbcTemplate.queryForObject(sql, param, BeanPropertyRowMapper.newInstance(Booking.class));
     }
 
+    public List<Booking> getAllForUser(long userId) {
+        String sql = "Select * From \"BOOKING\" Where \"user_id\" = :USER_ID Order By \"booking_date\" ASC";
+        Map<String,Long> param = new HashMap<>();
+        param.put("USER_ID",userId);
+        return jdbcTemplate.query(sql,param,BeanPropertyRowMapper.newInstance(Booking.class));
+    }
+
     public boolean deleteById(long id) {
         long currentUserId = userRepository.getCurrentUserId();
         Booking booking = getById(id);

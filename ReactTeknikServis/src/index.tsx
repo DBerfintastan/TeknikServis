@@ -9,6 +9,7 @@ import IndexComponent from "./components/IndexComponent";
 import { UserContextProvider } from "./components/context/UsernameContext";
 import LoginComponent from "./components/Login/LoginComponent";
 import SignUpComponent from "./components/Login/SignUpComponent";
+import TakeBookingComponent from "./components/booking/TakeBookingComponent";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -28,6 +29,7 @@ root.render(
                 <Route path="/" element={<IndexComponent />} />
                 <Route path="/login" element={<LoginComponent />} />
                 <Route path="user/save" element={<SignUpComponent />} />
+                <Route path="/booking" element={<TakeBookingComponent />} />
               </Routes>
             </Col>
           </Row>

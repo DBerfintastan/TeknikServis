@@ -27,14 +27,15 @@ public class BookingController
     
     private final BookingRepository bookingRepository;
     private final BookingService bookingService;
-
+    private final UserRepository userRepository;
     private final MessageSource messageSource;
     
     @Autowired
-    public BookingController(BookingRepository repository, UserRepository userRepository, BookingService bookingService, MessageSource messageSource)
+    public BookingController(BookingRepository repository, UserRepository userRepository, BookingService bookingService, UserRepository userRepository1, MessageSource messageSource)
     {
         this.bookingRepository = repository;
         this.bookingService = bookingService;
+        this.userRepository = userRepository1;
         this.messageSource = messageSource;
     }
     
@@ -46,6 +47,11 @@ public class BookingController
     public ResponseEntity<Booking> getById(@PathVariable long id)
     {
         return ResponseEntity.ok(bookingRepository.getById(id));
+    }
+    @GetMapping("/user/getAll")
+    public ResponseEntity<List<Booking>> getAllForUser()
+    {
+        return ResponseEntity.ok(bookingRepository.getAllForUser(userRepository.getCurrentUserId()));
     }
     
     @PostMapping("/user/save")

@@ -15,7 +15,7 @@ export default function MenuComponent() {
         <NavLink to="/">Anasayfa</NavLink>
         <NavLink
           className={({ isActive }) => (isActive ? "bg-info" : "")}
-          to="/"
+          to="/booking"
           end
         >
           Bookings
@@ -42,8 +42,6 @@ export default function MenuComponent() {
           Services
         </NavLink>
 
-
-        
         <NavLink
           to="/konu/kaydet"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
@@ -56,17 +54,21 @@ export default function MenuComponent() {
           className={({ isActive }) => (isActive ? "bg-info" : "")}
         >
           Sale_Log
-
-          
         </NavLink>
-        {localStorage.getItem("userjwt") === null &&
-        <NavLink to="user/save" className={({ isActive }) => (isActive ? "bg-info" : "")}>
-          User sign up
-        </NavLink> }
-
+        {localStorage.getItem("userjwt") === null && (
+          <NavLink
+            to="user/save"
+            className={({ isActive }) => (isActive ? "bg-info" : "")}
+          >
+            User sign up
+          </NavLink>
+        )}
 
         {localStorage.getItem("userjwt") === null && (
-          <NavLink to="/login" className={({ isActive }) => (isActive ? "bg-info" : "")}>
+          <NavLink
+            to="/login"
+            className={({ isActive }) => (isActive ? "bg-info" : "")}
+          >
             Login
           </NavLink>
         )}
