@@ -59,20 +59,20 @@ export default function MenuComponent() {
         >
           Proposal (Admin)
         </NavLink>
-        <NavLink
+        <NavLink style={menuTextStyle}
           to="/sale/save"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
         >
           Admin Sales
         </NavLink>
-        <NavLink
+        <NavLink style={menuTextStyle}
           to="/sale/getsales"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
         >
           Customer Sales
         </NavLink>
         
-        <NavLink
+        <NavLink style={menuTextStyle}
           to="/konu"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
           end
@@ -80,13 +80,13 @@ export default function MenuComponent() {
           Services
         </NavLink>
 
-        <NavLink
+        <NavLink style={menuTextStyle}
           to="/konu/kaydet"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
         >
           Products
         </NavLink>
-        <NavLink
+        <NavLink style={menuTextStyle}
           to="/ders"
           end
           className={({ isActive }) => (isActive ? "bg-info" : "")}
