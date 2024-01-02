@@ -7,35 +7,58 @@ export default function MenuComponent() {
   const mynavigate = useNavigate();
   const ourUserContext = useContext(UserContext);
 
+  const menuStyle = {
+    display: 'flex',
+    height:'102%'
+  }
+
+  const menuTextStyle = {
+    textDecoration: 'none',
+    color: '#006600',
+    marginTop:'10px',
+  }
+
+  const navButtonStyle = {
+    textDecoration: 'none',
+    color: '#006600',
+    widht: '100px',
+  }
+
   return (
-    <Stack>
-      <h1>Teknik Servis</h1>
-      <Stack gap={2}>
+      <Stack style={menuStyle}>
+        <img src="a.png" style={{ width: "100px", marginLeft: "50px" }} />
+        <h2 style={{ color: '#006600', marginTop: '20px' }}>Teknik Servis</h2>
         {/* react-router-dom 'dan gelen navlik olacak */}
-        <NavLink to="/">Anasayfa</NavLink>
-        <NavLink
+        <NavLink style={menuTextStyle} to="/"> Home </NavLink>
+        <NavLink style={menuTextStyle}
           className={({ isActive }) => (isActive ? "bg-info" : "")}
           to="/booking"
           end
         >
           Bookings
         </NavLink>
-        <NavLink
+        <NavLink style={menuTextStyle}
           className={({ isActive }) => (isActive ? "bg-info" : "")}
           to="/bookingAdmin"
           end
         >
-          BookingsAdmin
+          Bookings (Admin)
         </NavLink>
         {/* context içerisindeki state bu componentin render edilmesini sağlıyor */}
-        <NavLink
-          to="/ogrenci"
+        <NavLink style={menuTextStyle}
+          to="/proposal"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
           end
         >
-          Proposals
+          Proposal
         </NavLink>
-   
+        <NavLink style={menuTextStyle}
+          to="/proposalAdmin"
+          className={({ isActive }) => (isActive ? "bg-info" : "")}
+          end
+        >
+          Proposal (Admin)
+        </NavLink>
         <NavLink
           to="/sale/save"
           className={({ isActive }) => (isActive ? "bg-info" : "")}
@@ -70,39 +93,45 @@ export default function MenuComponent() {
         >
           Sale_Log
         </NavLink>
-        {localStorage.getItem("userjwt") === null && (
-          <NavLink
-            to="user/save"
-            className={({ isActive }) => (isActive ? "bg-info" : "")}
-          >
-            User sign up
-          </NavLink>
-        )}
-
-        {localStorage.getItem("userjwt") === null && (
-          <NavLink
-            to="/login"
-            className={({ isActive }) => (isActive ? "bg-info" : "")}
-          >
-            Login
-          </NavLink>
-        )}
-        {localStorage.getItem("userjwt") !== null && (
-          <Button
-            variant="outline-danger"
-            onClick={() => {
-              localStorage.removeItem("username");
-              localStorage.removeItem("userjwt");
-              localStorage.removeItem("authorities");
-              ourUserContext.setterforusername("");
-              // replace çalışmadı
-              mynavigate("/", { replace: true });
-            }}
-          >
-            Logout
-          </Button>
-        )}
+        <br></br>
+        <div>
+          {localStorage.getItem("userjwt") === null && (
+            <Button variant="outline-success" style={{ marginTop: "5px" }}>
+              <NavLink style={navButtonStyle}
+                to="user/save"
+                className={({ isActive }) => (isActive ? "bg-info" : "")}
+              >
+                Join Us!
+              </NavLink>
+            </Button>
+          )}
+          <br></br>
+          {localStorage.getItem("userjwt") === null && (
+            <Button variant="outline-success" style={{ marginTop: "10px" }}>
+              <NavLink style={navButtonStyle}
+                to="/login"
+                className={({ isActive }) => (isActive ? "bg-info" : "")}
+              >
+                Login
+              </NavLink>
+            </Button>
+          )}
+          {localStorage.getItem("userjwt") !== null && (
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                localStorage.removeItem("username");
+                localStorage.removeItem("userjwt");
+                localStorage.removeItem("authorities");
+                ourUserContext.setterforusername("");
+                // replace çalışmadı
+                mynavigate("/", { replace: true });
+              }}
+            >
+              Logout
+            </Button>
+          )}
+        </div>
       </Stack>
-    </Stack>
   );
 }

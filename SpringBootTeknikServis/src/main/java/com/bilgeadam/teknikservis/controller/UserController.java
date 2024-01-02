@@ -25,6 +25,12 @@ public class UserController {
         this.messageSource = messageSource;
     }
 
+    /*@Operation()
+    @PostMapping("/login")
+    public void fakeLogin(@RequestParam String username, @RequestParam String password) {
+        throw new IllegalStateException("This method shouldn't be called. It's implemented by Spring Security filters.");
+    }*/
+
     @PostMapping(path = "save" , consumes = MediaType.APPLICATION_JSON_VALUE)
     @Operation(description = "Başarılı olursa 200 olmazssa 505", summary = "Body ile post et")
     @ApiResponses(value =
