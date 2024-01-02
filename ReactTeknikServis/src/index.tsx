@@ -11,6 +11,9 @@ import LoginComponent from "./components/Login/LoginComponent";
 import SignUpComponent from "./components/Login/SignUpComponent";
 import TakeBookingComponent from "./components/booking/TakeBookingComponent";
 import BookingAdminComponent from "./components/booking/BookingAdminComponent";
+import AdminSale from "./components/sale/AdminSale";
+import CustomerSale from "./components/sale/CustomerSale";
+import CartPage from "./components/sale/CartPage";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -34,6 +37,9 @@ root.render(
                 />
                 <Route path="/login" element={<LoginComponent />} />
                 <Route path="user/save" element={<SignUpComponent />} />
+                <Route path="/sale/save" element={<AdminSale />} />
+                <Route path="/sale/getsales" element={<CustomerSale />} />
+                <Route path="/cart" element={<CartPage />} />
                 <Route path="/booking" element={<TakeBookingComponent />} />
               </Routes>
             </Col>

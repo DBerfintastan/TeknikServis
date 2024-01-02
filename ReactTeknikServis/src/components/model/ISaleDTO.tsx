@@ -4,5 +4,6 @@ export interface ISaleDTO {
   id: number;
   price: number;
   note: string;
-  product: IProduct;
+  product: string;
+  product_id: number;
 }
