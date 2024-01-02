@@ -1,8 +1,6 @@
 package com.bilgeadam.teknikservis.controller;
 
-import com.bilgeadam.teknikservis.model.Product;
-import com.bilgeadam.teknikservis.model.Sale;
-import com.bilgeadam.teknikservis.model.Service;
+import com.bilgeadam.teknikservis.model.*;
 import com.bilgeadam.teknikservis.repository.ProductRepository;
 import com.bilgeadam.teknikservis.repository.SaleRepository;
 import com.bilgeadam.teknikservis.service.ProductService;
@@ -15,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -116,5 +115,13 @@ public class SaleController {
 		return ResponseEntity.ok(saleRepository.getSaleByProductName(product_name));
    
 }
-    
+    @GetMapping(path = "/getalldto",produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(description = "Başarılı olursa 200", summary ="Sistemdeki kullanıcıları gösterir")
+    @ApiResponses(value =
+            { @ApiResponse(responseCode = "200", description = "Başarılı olursa")})
+    public ResponseEntity<List<SaleDTO>> getalldto()
+    {
+        return ResponseEntity.ok(saleRepository.getalldto());
+    }
+
 }

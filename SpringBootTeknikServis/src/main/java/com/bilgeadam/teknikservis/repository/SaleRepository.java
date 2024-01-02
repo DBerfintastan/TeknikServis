@@ -1,20 +1,17 @@
 package com.bilgeadam.teknikservis.repository;
 
+import com.bilgeadam.teknikservis.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
-import com.bilgeadam.teknikservis.model.Product;
-import com.bilgeadam.teknikservis.model.Sale;
-import com.bilgeadam.teknikservis.model.Sale_log;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 @Repository
 public class SaleRepository {
@@ -36,6 +33,22 @@ public class SaleRepository {
         String sql = "SELECT * FROM public.\"SALE\" WHERE \"is_sold\"= false order by \"id\" asc";
         return jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(Sale.class));
     }
+//    public List<SaleDTO> getAllDTO() {
+//        String sql = "Select \"SALE\".id,\"SALE\".note,\"SALE\".price,\"PRODUCT\".\"name\" From \"SALE\" inner join \"PRODUCT\" on \"SALE\".product_id = \"PRODUCT\".id Where \"SALE\".is_sold=false";
+//
+//        RowMapper<SaleDTO> rowMapper = new RowMapper<ProposalAdminDto>() {
+//            @Override
+//            public SaleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                SaleDTO saleDTO = new SaleDTO();
+//                saleDTO.setId(rs.getLong("id"));
+//                saleDTO.setNote(rs.getString("note"));
+//                saleDTO.setPrice(rs.getLong("price"));
+//                saleDTO.setProduct(rs.getString("name"));
+//                return saleDTO;
+//            }
+//        };
+//        return jdbcTemplate.query(sql, rowMapper);
+//    }
 
     public boolean deleteById(long id)
     {
@@ -81,5 +94,22 @@ public class SaleRepository {
         param.put("ID", id);
 
         return jdbcTemplate.update(sql, param) == 1;
+    }
+    public List<SaleDTO> getalldto()
+    {
+        String sql = "Select \"SALE\".id,\"SALE\".product_id,\"SALE\".note,\"SALE\".price,\"PRODUCT\".\"name\" From \"SALE\" inner join \"PRODUCT\" on \"SALE\".product_id = \"PRODUCT\".id Where \"SALE\".is_sold=false";
+        RowMapper<SaleDTO> rowMapper = new RowMapper<SaleDTO>() {
+            @Override
+            public SaleDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+                SaleDTO saleDTO = new SaleDTO();
+                saleDTO.setId(rs.getLong("id"));
+                saleDTO.setNote(rs.getString("note"));
+                saleDTO.setPrice(rs.getLong("price"));
+                saleDTO.setProduct(rs.getString("name"));
+                saleDTO.setProduct_id(rs.getLong("product_id"));
+                return saleDTO;
+            }
+        };
+        return jdbcTemplate.query(sql, rowMapper);
     }
 }
